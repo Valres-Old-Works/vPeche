@@ -1,0 +1,13 @@
+tips:
+  enabled: true
+  text: "Un poisson mord !"
+
+durability: 500
+range: 30
+fish-time:
+  min: 10
+  max: 30
+
+loots:
+  - "diamond"
+  - "emerald"
