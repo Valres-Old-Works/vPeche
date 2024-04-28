@@ -1,6 +1,6 @@
 <?php
 
-namespace Override;
+namespace Valres\Peche\libs\Override;
 
 use Closure;
 use pocketmine\data\bedrock\item\SavedItemData;

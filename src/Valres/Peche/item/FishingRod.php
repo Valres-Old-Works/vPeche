@@ -16,7 +16,7 @@ use pocketmine\item\ItemUseResult;
 use Valres\Peche\event\PlayerFishEvent;
 use Valres\Peche\Peche;
 
-class FishingRob extends Durable implements Releasable
+class FishingRod extends Durable implements Releasable
 {
     private static array $cache = [];
     /** @var Item[] */
@@ -46,7 +46,6 @@ class FishingRob extends Durable implements Releasable
                 return parent::onClickAir($player, $directionVector, $returnedItems);
             }
         }
-
         $loc = $player->getLocation();
         $loc->y += 1;
         $player->broadcastSound(new ThrowSound());
@@ -69,8 +68,10 @@ class FishingRob extends Durable implements Releasable
         $event->call();
 
         $player->getInventory()->canAddItem($reward) ? $player->getInventory()->addItem($reward) : $player->getWorld()->dropItem($player->getPosition()->asVector3(), $reward);
-        $player->broadcastSound(new XpLevelUpSound(3));
-        $player->getXpManager()->addXp(rand(1, 5));
+        $config = Peche::getInstance()->getConfig();
+        $xp = rand($config->get("xp-reward")["min"], $config->get("xp-reward")["max"]);
+        $player->getXpManager()->addXp($xp);
+        $player->broadcastSound(new XpLevelUpSound($xp));
         $this->applyDamage(1);
         $player->getInventory()->setItemInHand($this);
     }
@@ -88,13 +89,13 @@ class FishingRob extends Durable implements Releasable
     public static function getMinFishTimeInSeconds(): float
     {
         $config = Peche::getInstance()->getConfig();
-        return $config->get("fish-time")["min"];
+        return $config->get("fish-time")["min"] * 20;
     }
 
     public static function getMaxFishTimeInSeconds(): float
     {
         $config = Peche::getInstance()->getConfig();
-        return $config->get("fish-time")["max"];
+        return $config->get("fish-time")["max"] * 20;
     }
 
     public function getMaxDurability(): int

@@ -7,7 +7,11 @@ range: 30
 fish-time:
   min: 10
   max: 30
+xp-reward:
+  min: 3
+  max: 5
 
-loots:
+rewards:
   - "diamond"
   - "emerald"
+    

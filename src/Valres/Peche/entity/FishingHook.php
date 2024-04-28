@@ -6,7 +6,6 @@ use pocketmine\block\Water;
 use pocketmine\entity\Entity;
 use pocketmine\entity\EntitySizeInfo;
 use pocketmine\entity\projectile\Projectile;
-use pocketmine\item\FishingRod;
 use pocketmine\math\RayTraceResult;
 use pocketmine\math\Vector3;
 use pocketmine\nbt\tag\CompoundTag;
@@ -15,6 +14,7 @@ use pocketmine\player\Player;
 use pocketmine\utils\Random;
 use pocketmine\world\particle\BubbleParticle;
 use pocketmine\world\sound\WaterSplashSound;
+use Valres\Peche\item\FishingRod;
 use Valres\Peche\Peche;
 
 class FishingHook extends Projectile
@@ -35,7 +35,6 @@ class FishingHook extends Projectile
 
         $this->setMaxHealth(999);
         $this->range = $config->get("range");
-        $this->maxFishTime = $config->get("max-fish-time") * 20;
         $this->setCanSaveWithChunk(false);
     }
 
@@ -68,7 +67,9 @@ class FishingHook extends Projectile
 
     public function onUpdate(int $currentTick): bool
     {
-        if($this->isClosed() || $this->isFlaggedForDespawn()) return false;
+        if($this->isClosed() || $this->isFlaggedForDespawn()){
+            return false;
+        }
 
         $owner = $this->getOwningEntity();
         if($owner instanceof Player){
@@ -103,7 +104,7 @@ class FishingHook extends Projectile
                     $this->fishTime = 0;
                     $this->time = 0;
                     $this->active = true;
-                    $owner->broadcastSound(new WaterSplashSound(1));
+                    $this->getWorld()->addSound($this->getPosition(), new WaterSplashSound(1));
                 }
             }
         } else $this->flagForDespawn();
